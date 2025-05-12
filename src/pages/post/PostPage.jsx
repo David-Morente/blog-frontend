@@ -28,6 +28,47 @@ export const PostPage = () => {
                 <h1 className="display-6 mb-4">Publicaciones</h1>
             </div>
 
+            <div className="filter-container">
+                <div className="filter-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                    </svg>
+                    Filtrar publicaciones
+                </div>
+                
+                    <div className="filter-options">
+                        <div className="category-filters">
+                            <button className="filter-btn active" data-category="all">Todos</button>
+                            <button className="filter-btn" data-category="taller">Taller</button>
+                            <button className="filter-btn" data-category="tecnologia">Tecnología</button>
+                            <button className="filter-btn" data-category="practica">Práctica Supervisada</button>
+                        </div>
+                        
+                        <div className="sort-options">
+                            <button className="sort-btn active" data-sort="desc">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="m3 16 4 4 4-4"></path>
+                                    <path d="M7 20V4"></path>
+                                    <path d="M11 4h4"></path>
+                                    <path d="M11 8h7"></path>
+                                    <path d="M11 12h10"></path>
+                                </svg>
+                                Más recientes
+                            </button>
+                            <button className="sort-btn" data-sort="asc">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="m3 8 4-4 4 4"></path>
+                                    <path d="M7 4v16"></path>
+                                    <path d="M11 12h4"></path>
+                                    <path d="M11 16h7"></path>
+                                    <path d="M11 20h10"></path>
+                                </svg>
+                                Más antiguos
+                            </button>
+                        </div>
+                    </div>
+            </div>
+
             {list.map(item => (
                 <div key={item._id} className="col-md-6 col-lg-4">
                     <Link to={`/GetPost/${item._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
