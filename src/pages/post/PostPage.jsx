@@ -1,16 +1,39 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGetPosts } from '../../hooks/useGetPosts.jsx';
 import { Link } from "react-router-dom";
 import noDisponible from '../../assets/no-disponible.jpg';
 
 export const PostPage = () => {
-
-    console.log(noDisponible)
     const { posts, fetchPosts, isLoading } = useGetPosts();
+
+    const [categoryFilter, setCategoryFilter] = useState("all");
+    const [sortOrder, setSortOrder] = useState("desc");
 
     useEffect(() => {
       fetchPosts();
     }, [fetchPosts]);
+
+    const handleCategoryChange = (category) => {
+        setCategoryFilter(category);
+    };
+
+    const handleSortChange = (order) => {
+        setSortOrder(order);
+    };
+
+    const filteredPosts = posts
+        .filter(post => {
+        if (categoryFilter === "all") return true;
+        if (categoryFilter === "taller") return post.courseCategory?.toLowerCase() === "taller";
+        if (categoryFilter === "tecnologia") return post.courseCategory?.toLowerCase() === "tecnología";
+        if (categoryFilter === "practica") return post.courseCategory?.toLowerCase().includes("práctica");
+        return true;
+    })
+    .sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
+    });
 
     if (isLoading) {
       return (
@@ -20,9 +43,6 @@ export const PostPage = () => {
       );
     }
     
-    const list = Array.isArray(posts)
-      ? posts
-      : [];
     return (
         
         <div className="container py-5">
@@ -41,14 +61,14 @@ export const PostPage = () => {
                 
                     <div className="filter-options">
                         <div className="category-filters">
-                            <button className="filter-btn active" data-category="all">Todos</button>
-                            <button className="filter-btn" data-category="taller">Taller</button>
-                            <button className="filter-btn" data-category="tecnologia">Tecnología</button>
-                            <button className="filter-btn" data-category="practica">Práctica Supervisada</button>
+                            <button className={`filter-btn ${categoryFilter === "all" ? "active" : ""}`} onClick={() => handleCategoryChange("all")}>Todos</button>
+                            <button className={`filter-btn ${categoryFilter === "taller" ? "active" : ""}`} onClick={() => handleCategoryChange("taller")}>Taller</button>
+                            <button className={`filter-btn ${categoryFilter === "tecnologia" ? "active" : ""}`} onClick={() => handleCategoryChange("tecnologia")}>Tecnología</button>
+                            <button className={`filter-btn ${categoryFilter === "practica" ? "active" : ""}`} onClick={() => handleCategoryChange("practica")}>Práctica Supervisada</button>
                         </div>
                         
                         <div className="sort-options">
-                            <button className="sort-btn active" data-sort="desc">
+                            <button className={`sort-btn ${sortOrder === "desc" ? "active" : ""}`} onClick={() => handleSortChange("desc")}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="m3 16 4 4 4-4"></path>
                                     <path d="M7 20V4"></path>
@@ -58,7 +78,7 @@ export const PostPage = () => {
                                 </svg>
                                 Más recientes
                             </button>
-                            <button className="sort-btn" data-sort="asc">
+                            <button className={`sort-btn ${sortOrder === "asc" ? "active" : ""}`} onClick={() => handleSortChange("asc")}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="m3 8 4-4 4 4"></path>
                                     <path d="M7 4v16"></path>
@@ -72,7 +92,7 @@ export const PostPage = () => {
                     </div>
             </div>
 
-            {list.map(item => (
+            {filteredPosts.map(item => (
                 <div key={item._id} className="col-md-6 col-lg-4">
                     <Link to={`/GetPost/${item._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                         <div className="card h-100">
