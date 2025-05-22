@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetPost } from '../../hooks/useGetPost';
 import { useCreateComment } from '../../hooks/useCreateComment';
+import noDisponible from '../../assets/no-disponible.jpg';
 
 const GetPost = () => {
     const { id } = useParams();
@@ -48,6 +49,11 @@ const GetPost = () => {
 
             <div className="post-container">
                 <div className="post-header">
+                    {post.postImage && post.postImage.length > 0 ? (
+                        <img src={post.postImage[post.postImage.length - 1]} alt="Foto de Post" class="card-img-top"/>
+                    ) : (
+                        <img src={noDisponible} alt="Foto de Post" class="card-img-top"/>
+                    )}
                     <h1 className="post-title">{post.title}</h1>
                     <div className="post-meta">
                         <i className="far fa-calendar-alt"></i>

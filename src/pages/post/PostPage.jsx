@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
 import { useGetPosts } from '../../hooks/useGetPosts.jsx';
 import { Link } from "react-router-dom";
+import noDisponible from '../../assets/no-disponible.jpg';
 
 export const PostPage = () => {
+
+    console.log(noDisponible)
     const { posts, fetchPosts, isLoading } = useGetPosts();
 
     useEffect(() => {
@@ -73,6 +76,11 @@ export const PostPage = () => {
                 <div key={item._id} className="col-md-6 col-lg-4">
                     <Link to={`/GetPost/${item._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                         <div className="card h-100">
+                                {item.postImage && item.postImage.length > 0 ? (
+                                    <img src={item.postImage[item.postImage.length - 1]} alt="Foto de Post" class="card-img-top"/>
+                                ) : (
+                                    <img src={noDisponible} alt="Foto de Post" class="card-img-top"/>
+                                )}
                             <div className="card-body">
                                 <h5 className="card-title">
                                 {item.title}
